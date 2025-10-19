@@ -14,11 +14,11 @@ This is a react native project with some basic functionality already built in so
 
 - [ ] Authentication
    - [ ] Traditional
-      - [ ] Login
-      - [ ] Register
+            - [ ] Login
+            - [ ] Register
    - [ ] OAuth
-      - [ ] Login
-      - [ ] Register
+            - [ ] Login
+            - [ ] Register
    - [ ] Recover account
    - [ ] Reset password
    - [ ] Verify email address
