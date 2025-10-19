@@ -13,6 +13,19 @@ This is a react native project with some basic functionality already built in so
 ## Features
 
 - [ ] Authentication
+   - [ ] Traditional
+      - [ ] Login
+      - [ ] Register
+   - [ ] OAuth
+      - [ ] Login
+      - [ ] Register
+   - [ ] Recover account
+   - [ ] Reset password
+   - [ ] Verify email address
+   - [ ] Logout
+   - [ ] Change password
+   - [ ] Update profile
+   - [ ] Delete account
 - [ ] Basic layout
 - [ ] Dashboard
 
