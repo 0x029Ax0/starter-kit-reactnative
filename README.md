@@ -5,28 +5,32 @@ This is a react native project with some basic functionality already built in so
 ## Packages
 
 - [x] [React 19](https://reactnative.dev)
+- [x] [React Navigation](https://reactnavigation.org)
 - [x] [Expo Vector Icons](https://docs.expo.dev/guides/icons/)
-- [ ] Tanstack useQuery
-- [ ] React Hook Forms
+- [x] [Tanstack Query](https://tanstack.com/query/latest)
+- [x] [Tanstack Form](https://tanstack.com/form/latest)
+- [x] [Zod](https://zod.dev)
 
 ## Features
 
-- [ ] Authentication
-   - [ ] Traditional
-            - [ ] Login
-            - [ ] Register
+- [ ] Login
+   - [ ] Traditional form
+   - [ ] OAuth 
+   - [ ] Link to recover account
+   - [ ] Link to register
+- [ ] Register
+   - [ ] Traditional form
    - [ ] OAuth
-            - [ ] Login
-            - [ ] Register
-   - [ ] Recover account
-   - [ ] Reset password
-   - [ ] Verify email address
-   - [ ] Logout
+   - [ ] Link to login
+- [ ] Recover account
+- [ ] Reset password
+- [ ] Verify email
+- [ ] Dashboard
+- [ ] Menu (sidebar)
    - [ ] Change password
    - [ ] Update profile
    - [ ] Delete account
-- [ ] Basic layout
-- [ ] Dashboard
+   - [ ] Logout
 
 ## Get started
 
