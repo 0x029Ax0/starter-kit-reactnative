@@ -5,6 +5,7 @@ import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { FontAwesome6 } from "@expo/vector-icons";
 import { Link } from 'expo-router';
 
 export default function HomeScreen() {
@@ -34,6 +35,9 @@ export default function HomeScreen() {
                         })}
                     </ThemedText>{' '}
                     to open developer tools.
+                </ThemedText>
+                <ThemedText>
+                    Wassup my floppedop <FontAwesome6 name="user-ninja" size={24}></FontAwesome6>
                 </ThemedText>
             </ThemedView>
             <ThemedView style={styles.stepContainer}>

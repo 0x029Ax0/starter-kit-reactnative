@@ -4,9 +4,8 @@ This is a react native project with some basic functionality already built in so
 
 ## Packages
 
-- [x] React 19
-- [ ] TailwindCSS
-- [ ] Fontawesome
+- [x] [React 19](https://reactnative.dev)
+- [x] [Expo Vector Icons](https://docs.expo.dev/guides/icons/)
 - [ ] Tanstack useQuery
 - [ ] React Hook Forms
 
