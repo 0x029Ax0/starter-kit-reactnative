@@ -90,14 +90,11 @@ export default function LoginScreen() {
                                 />
                             )}
                         </form.Field>
-
-                        <View style={{ color: "black" }}>
-                            <Button 
-                                title="Sign in" 
-                                onPress={() => form.handleSubmit()} 
-                                color="#ffffff"
-                                />
-                        </View>
+                        {/* Submit */}
+                        <Button 
+                            title="Sign in" 
+                            onPress={() => form.handleSubmit()}
+                            />
                     </View>
                     <View style={styles.footer}>
                         <ThemedText style={styles.footerText}>
