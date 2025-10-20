@@ -13,13 +13,17 @@ This is a react native project with some basic functionality already built in so
 
 ## Features
 
+- [x] Axios integration
+   - [x] Axios instance
+   - [x] useAxios hook
+   - [ ] Supports auth bearer tokens
 - [ ] Login
-   - [ ] Traditional form
+   - [x] Traditional form
    - [ ] OAuth 
    - [ ] Link to recover account
    - [ ] Link to register
 - [ ] Register
-   - [ ] Traditional form
+   - [x] Traditional form
    - [ ] OAuth
    - [ ] Link to login
 - [ ] Recover account
