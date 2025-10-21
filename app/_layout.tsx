@@ -1,34 +1,36 @@
-import { AxiosProvider } from '@/api/AxiosProvider';
-import { useColorScheme } from '@/hooks/colorSchema/use-color-scheme';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useColorScheme } from '@/hooks/colorSchema/useColorScheme';
+import { AxiosProvider } from '@/lib/axios';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function RootLayout() {
+const RootLayout = () => {
     const colorScheme = useColorScheme();
-    
+
+    const queryClient = new QueryClient();
+
     return (
-        <AxiosProvider
-            baseURL="https://api.example.com"
-            headers={{ "x-app-platform": "mobile" }}
-            getAuthToken={async () => (await AsyncStorage.getItem("access_token")) || null}
-            onAuthError={() => {
-                // e.g., navigate to Login, toast, or clear tokens
-                console.warn("Unauthorized — redirecting to login");
-            }}
-        >
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <SafeAreaProvider>
-                    <Stack>
-                        <Stack.Screen name="index" options={{ headerShown: false }} />
-                        <Stack.Screen name="register" options={{ title: 'Register' }} />
-                    </Stack>        
-                    <StatusBar style="auto" />
-                </SafeAreaProvider>
-            </ThemeProvider>
+        <AxiosProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <QueryClientProvider client={queryClient}>
+                    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                        <SafeAreaProvider>
+                            <Stack>
+                                <Stack.Screen name="index" options={{ headerShown: false }} />
+                                <Stack.Screen name="login" options={{ headerShown: false }} />
+                                <Stack.Screen name="register" options={{ title: 'Register' }} />
+                            </Stack>        
+                            <StatusBar style="auto" />
+                        </SafeAreaProvider>
+                    </ThemeProvider>
+                </QueryClientProvider>
+            </GestureHandlerRootView>
         </AxiosProvider>
     );
 }
+
+export default RootLayout
