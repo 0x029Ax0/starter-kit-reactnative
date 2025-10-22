@@ -1,4 +1,4 @@
-import { AxiosContext } from "@/lib/axios";
+import { AxiosContext } from "@/lib/http";
 import { AxiosInstance } from "axios";
 import { useContext } from "react";
 

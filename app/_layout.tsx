@@ -1,5 +1,5 @@
 import { useColorScheme } from '@/hooks/colorSchema/useColorScheme';
-import { AxiosProvider } from '@/lib/axios';
+import { AxiosProvider } from '@/lib/http';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from "expo-router";
@@ -20,8 +20,8 @@ const RootLayout = () => {
                     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                         <SafeAreaProvider>
                             <Stack>
+                                {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
                                 <Stack.Screen name="index" options={{ headerShown: false }} />
-                                <Stack.Screen name="login" options={{ headerShown: false }} />
                                 <Stack.Screen name="register" options={{ title: 'Register' }} />
                             </Stack>        
                             <StatusBar style="auto" />

@@ -39,7 +39,15 @@
                         "backgroundColor": "#111"
                     }
                 }
+            ],
+            [
+                "expo-secure-store",
+                {
+                    "configureAndroidBackup": true
+                }
             ]
+            
+            
         ],
         "experiments": {
             "typedRoutes": true,
