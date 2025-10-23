@@ -14,7 +14,7 @@ export type LoginResponse = {
     };
 };
 
-export const useResetPassword = (
+export const useLogin = (
     options?: Parameters<typeof useApiMutation<LoginCredentials, LoginResponse>>[2]
 ) => {
     return useApiMutation<LoginCredentials, LoginResponse>(
