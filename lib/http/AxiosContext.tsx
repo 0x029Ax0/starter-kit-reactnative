@@ -1,5 +1,5 @@
 import type { AxiosInstance } from 'axios';
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode } from 'react';
 import { http } from './AxiosInstance';
 
 type AxiosProviderProps = {
@@ -15,8 +15,4 @@ export const AxiosProvider = ({ children, instance }: AxiosProviderProps) => {
             { children }
         </AxiosContext.Provider>
     );
-};
-
-export const useAxios = (): AxiosInstance => {
-    return useContext(AxiosContext);
 };

@@ -7,9 +7,7 @@ const RootLayout = () => {
     return (
         <Providers>
             <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="login" options={{ headerShown: false }} />
-                <Stack.Screen name="register" options={{ title: 'Register' }} />
+                <Stack.Screen name="index" options={{ title: "Dashboard" }} />
             </Stack>        
             <StatusBar style="auto" />
         </Providers>

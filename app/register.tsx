@@ -1,11 +1,11 @@
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { FormField } from '@/components/ui/form-field';
-import { useRegister } from '@/hooks/auth';
-import { useNavigation } from '@react-navigation/native';
+import { ThemedText } from '@/components/themedText';
+import { ThemedView } from '@/components/themedView';
+import { FormField } from '@/components/ui/formField';
+import { useAuth } from '@/lib';
 import { useForm } from '@tanstack/react-form';
+import { useRouter } from 'expo-router';
 import { Button, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { z } from 'zod';
 
 const registerSchema = z
@@ -21,9 +21,9 @@ const registerSchema = z
     });
 
 export default function RegisterScreen() {
-    const insets = useSafeAreaInsets();
-    const navigation = useNavigation();
-    const register = useRegister();
+    const router = useRouter();
+
+    const { register } = useAuth();
 
     const form = useForm({
         defaultValues: {
@@ -37,13 +37,16 @@ export default function RegisterScreen() {
         },
         onSubmit: async ({ value }) => {
             console.debug('value submitted:', value);
-            const res = await register.mutateAsync({
+            const result = await register({
                 name: value.name,
                 email: value.email,
                 password: value.password,
                 password_confirmation: value.passwordConfirmation,
             });
-            console.debug('register response:', res);
+            console.debug('register response:', result);
+            if (result.status === "success") {
+                router.replace('/dashboard');
+            }
         },
     });
 
@@ -72,7 +75,7 @@ export default function RegisterScreen() {
                                         placeholder="Your name"
                                         autoCapitalize="words"
                                         autoCorrect={false}
-                                        errors={field.state.meta.errors}
+                                        errorMessages={field.state.meta.errors as any}
                                     />
                                 )}
                             </form.Field>
@@ -89,7 +92,7 @@ export default function RegisterScreen() {
                                         onChangeText={(text) => field.handleChange(text)}
                                         placeholder="you@example.com"
                                         textContentType="emailAddress"
-                                        errors={field.state.meta.errors}
+                                        errorMessages={field.state.meta.errors as any}
                                     />
                                 )}
                             </form.Field>
@@ -104,7 +107,7 @@ export default function RegisterScreen() {
                                         onChangeText={(text) => field.handleChange(text)}
                                         placeholder="Enter your password"
                                         textContentType="password"
-                                        errors={field.state.meta.errors}
+                                        errorMessages={field.state.meta.errors as any}
                                     />
                                 )}
                             </form.Field>
@@ -119,7 +122,7 @@ export default function RegisterScreen() {
                                         onChangeText={(text) => field.handleChange(text)}
                                         placeholder="Re-enter your password"
                                         textContentType="password"
-                                        errors={field.state.meta.errors}
+                                        errorMessages={field.state.meta.errors as any}
                                     />
                                 )}
                             </form.Field>
@@ -133,7 +136,7 @@ export default function RegisterScreen() {
                         </View>
 
                         <View style={styles.footer}>
-                            <ThemedText style={styles.footerText} onPress={() => navigation.goBack()}>
+                            <ThemedText style={styles.footerText} onPress={() => router.back()}>
                                 Already have an account?
                             </ThemedText>
                         </View>

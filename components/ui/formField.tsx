@@ -10,22 +10,22 @@ import {
     useColorScheme,
 } from 'react-native';
 
-type FormError = {
-    message: string;
-    code: string;
-    path: string[];
-    validation: string;
-};
-
 type FormFieldProps = TextInputProps & {
     label: string;
-    errorMessages?: FormError[];
+    errorMessages?: string[];
 };
 
 export const FormField = forwardRef<TextInput, FormFieldProps>(({ label, errorMessages, style, ...inputProps }, ref) => {
     const colorScheme = useColorScheme();
     const isDark = colorScheme === 'dark';
     const palette = isDark ? darkPalette : lightPalette;
+
+    // Normalize errors to array
+    const errors = errorMessages
+        ? Array.isArray(errorMessages)
+            ? errorMessages
+            : [errorMessages]
+        : [];
 
     return (
         <KeyboardAvoidingView
@@ -48,8 +48,8 @@ export const FormField = forwardRef<TextInput, FormFieldProps>(({ label, errorMe
                     ]}
                     {...inputProps}
                 />
-                {errorMessages?.map((error, i) => (
-                    <Text key={i} style={[styles.error, { color: palette.error }]}>{error.message}</Text>
+                {errors?.map((error, i) => (
+                    <Text key={i} style={[styles.error, { color: palette.error }]}>{error}</Text>
                 ))}
             </View>
         </KeyboardAvoidingView>
