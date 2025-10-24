@@ -1,7 +1,7 @@
 import { useApiMutation, useAxios } from "@/lib/http";
 import { useRouter } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Platform } from "react-native";
 import {
     ChangePasswordInput,
@@ -50,6 +50,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     const [state, setState] = useState<AuthState>("loading");
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
+
+    // Reference to the token
+    const tokenRef = useRef<string | null>(null);
+    useEffect(() => { tokenRef.current = accessToken; }, [accessToken]);
 
     // Secure storage for the accessToken
     const accessTokenStoreKey = "starter-kit-access-token";
@@ -196,9 +200,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         {
             url: 'auth/refresh',
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer '+accessToken,
-            },
         },
     );
     const refresh = useCallback(async () => {
@@ -211,64 +212,62 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     // Axios Interceptors
     useEffect(() => {
-        if (accessToken) {
-            console.debug("access token changed, setting axios interceptors", accessToken);
-            
-            // Attach token to requests
-            const requestInterceptor = axios.interceptors.request.use(config => {
-                if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-                console.debug("request interceptor", config.headers);
-                return config;
-            });
-    
-            // Redirect on 401
-            // TODO: send the user a notification
-            const responseInterceptor = axios.interceptors.response.use(
-                res => res,
-                async err => {
-                    console.debug("response interceptor");
-                    console.debug("- error:", err);
-                    return Promise.reject(err);
-                }
-            );
-    
-            // Cleanup the interceptors
-            return () => {
-                axios.interceptors.request.eject(requestInterceptor);
-                axios.interceptors.response.eject(responseInterceptor);
-            };
-        }
-    }, [accessToken]);
+        console.debug("access token changed, setting axios interceptors", accessToken);
+        
+        // Attach token to requests
+        const requestInterceptor = axios.interceptors.request.use(config => {
+            const token = tokenRef.current;
+            if (token) {
+                config.headers = config.headers ?? {};
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        });
 
-    // On mount
+        // Redirect on 401
+        // TODO: send the user a notification
+        const responseInterceptor = axios.interceptors.response.use(
+            res => res,
+            async err => {
+                console.debug("response interceptor");
+                console.debug("- error:", err);
+                return Promise.reject(err);
+            }
+        );
+
+        // Cleanup the interceptors
+        return () => {
+            axios.interceptors.request.eject(requestInterceptor);
+            axios.interceptors.response.eject(responseInterceptor);
+        };
+    }, [axios]);
+
+    // Bootstrap
     useEffect(() => {
-        // Retrieve the access token from storage
+        // Retrieve the access token from storage & persist it to state
         getAccessToken().then((token) => {
             if (token) {
-                // Persist the access token in state
                 setAccessToken(token);
-
-                // Attempt to refresh the logged in user
-                refresh()
-                    .then(() => {
-                        // Redirect user to the dashboard
-                        router.replace('/dashboard');
-                    })
-                    .catch((error) => {
-                        console.debug("refresh error:", error);
-                        // Reset the access token in storage as it's invalid
-                        setAccessToken(null);
-                        // Redirect user to login
-                        router.replace('/login');
-                    })
             } else {
-                router.replace("/login");
+                router.replace("/auth/login");
             }
         })
         .catch((error) => {
             console.debug("get access token error:", error);
         });
     }, []);
+
+    // Refresh once when access token becomes available
+    useEffect(() => {
+        if (!accessToken) return;
+        refresh()
+            .then(() => router.replace('/dashboard'))
+            .catch((error) => {
+                console.debug("refresh error:", error);
+                setAccessToken(null);
+                router.replace('/auth/login');
+            })
+    }, [accessToken]);
 
     // Compose the object we're making available through the provider
     const value = useMemo(() => ({

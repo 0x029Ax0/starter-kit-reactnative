@@ -1,10 +1,12 @@
 import logo from '@/assets/images/sharingan.png';
+import { FormTextField } from '@/components/forms/FormTextField';
 import { ThemedText } from '@/components/themedText';
-import { FormField } from '@/components/ui/formField';
-import { useAuth } from '@/lib/auth';
+import { LoginCredentials, loginSchema, useAuth } from '@/lib/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import { useForm } from 'react-hook-form';
 import {
     Button,
     KeyboardAvoidingView,
@@ -17,6 +19,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const LoginScreen = () => {
     const { login } = useAuth();
     const router = useRouter();
+
+    const { control, handleSubmit, formState: { errors } } = useForm<LoginCredentials>({
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+        resolver: zodResolver(loginSchema),
+    });
+
+    const onSubmit = async (credentials: LoginCredentials) => {
+        console.debug("submitting form", credentials);
+        
+        const response = await login(credentials);
+        console.debug("response:", response);
+
+        // router.replace("/dashboard");
+    };
 
     // const form = useForm({
     //     defaultValues: {
@@ -65,7 +84,20 @@ const LoginScreen = () => {
                     {/* Form */}
                     <View style={styles.form}>
                         {/* Email address */}
-                        <form.Field name="email">
+                        <FormTextField
+                            name="email"
+                            label="Email address"
+                            control={control}
+                            error={errors.email} />
+                        {/* Password */}
+                        <FormTextField
+                            name="password"
+                            label="Password"
+                            control={control}
+                            error={errors.password}
+                            secureTextEntry={true}
+                            />
+                        {/* <form.Field name="email">
                             {(field) => (
                                 <FormField
                                     label="Email"
@@ -79,9 +111,9 @@ const LoginScreen = () => {
                                     errorMessages={field.state.meta.errors as any}
                                 />
                             )}
-                        </form.Field>
+                        </form.Field> */}
                         {/* Password */}
-                        <form.Field name="password">
+                        {/* <form.Field name="password">
                             {(field) => (
                                 <FormField
                                     label="Password"
@@ -93,11 +125,11 @@ const LoginScreen = () => {
                                     errorMessages={field.state.meta.errors as any}
                                 />
                             )}
-                        </form.Field>
+                        </form.Field> */}
                         {/* Submit */}
                         <Button 
                             title="Sign in" 
-                            onPress={() => form.handleSubmit()}
+                            onPress={handleSubmit(onSubmit)}
                             />
                     </View>
                     <View style={styles.footer}>

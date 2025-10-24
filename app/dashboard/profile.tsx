@@ -1,27 +1,29 @@
 import { ThemedText, ThemedView } from "@/components";
+import { useAuth } from "@/lib";
 import { Image } from 'expo-image';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Logo from "@/assets/images/sharingan.png";
 
-const SplashScreen = () => {
+const ProfileScreen = () => {
+    const { user } = useAuth();
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <ThemedView style={styles.wrapper}>
                 <Image style={styles.logo} source={Logo} contentFit="contain" transition={300} />
                 <ThemedText style={styles.title}>
-                    Starter Kit
+                    {user?.name ?? "you"}!
                 </ThemedText>
                 <ThemedText style={styles.text}>
-                    Loading the application..
+                    Nice profile.
                 </ThemedText>
             </ThemedView>
         </SafeAreaView>
     );
 };
 
-export default SplashScreen;
+export default ProfileScreen;
 
 const styles = StyleSheet.create({
     safeAreaContainer: {
